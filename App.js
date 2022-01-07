@@ -18,6 +18,7 @@ import {
   FlatList,
   TouchableOpacity
 } from 'react-native';
+import ListItem from './src/components/molecules/taskList/ListItem'
 
 const App = () => {
   const [task, setTask] = useState('');
@@ -28,12 +29,11 @@ const App = () => {
   }
 
   const addTask = () => {
-    setTaskList([...taskList, {id: Math.random(), task}]);
+    setTaskList([...taskList, {id: Math.random(), completado : false, task}]);
     setTask('');
   } 
 
   const deleteTask = (id) => {
-    console.log('id: ' + id)
     setTaskList(taskList.filter(task => task.id !== id));
   }
   
@@ -54,16 +54,11 @@ const App = () => {
           <View style={styles.taskListContainer}>
             <Text style={styles.taskListTitle}>Task list</Text>
               {taskList.length > 0 ? (
-                <FlatList keyExtractor={(index) => index.toString()}
+                <FlatList keyExtractor={(item) => item.id.toString()}
                           refreshing={true}
                           data={taskList}
                           renderItem = { ({item, index}) => (
-                            <View style={styles.taskListItem} key={index}>
-                              <Text style={styles.textItem}>{item.task}</Text>
-                              <TouchableOpacity onPress={() => deleteTask(item.id)}>
-                                <Text style={styles.deleteItem}>X</Text>
-                              </TouchableOpacity>
-                            </View>
+                            <ListItem taskParam={item} deleteTask={deleteTask}></ListItem>
                           )}
                           ></FlatList>  
               ) : 
