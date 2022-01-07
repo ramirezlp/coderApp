@@ -7,104 +7,103 @@
  */
 
 import React from 'react';
-import type { Node } from 'react';
+import { useState } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
+  Button,
+  TextInput,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [task, setTask] = useState('');
+  const [taskList, setTaskList] = useState([]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const onChange = (text) => {
+      setTask(text);
+  }
 
+  const addTask = () => {
+    setTaskList([...taskList, {id: Math.random(), task}]);
+    setTask('');
+  } 
+
+  const deleteTask = (id) => {
+    console.log('id: ' + id)
+    setTaskList(taskList.filter(task => task.id !== id));
+  }
+  
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Hola, coder!">Esta es la primera App</Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView style={styles.container}>
+        <View style={styles.formContainer}> 
+          <TextInput style={styles.textInput} 
+                     placeholder="Name a tag"
+                     value={task}
+                     autofocus
+                     onChangeText={(text) => onChange(text)} ></TextInput>
+          <Button title='Send' 
+                  color="#9191E9"
+                  disabled={task.length === 0}
+                  onPress={() => {addTask()}}></Button>
         </View>
-      </ScrollView>
+        <View>
+          <View style={styles.taskListContainer}>
+            <Text style={styles.taskListTitle}>Task list</Text>
+              {taskList.length > 0 ? (
+                <FlatList keyExtractor={(index) => index.toString()}
+                          refreshing={true}
+                          data={taskList}
+                          renderItem = { ({item, index}) => (
+                            <View style={styles.taskListItem} key={index}>
+                              <Text style={styles.textItem}>{item.task}</Text>
+                              <TouchableOpacity onPress={() => deleteTask(item.id)}>
+                                <Text style={styles.deleteItem}>X</Text>
+                              </TouchableOpacity>
+                            </View>
+                          )}
+                          ></FlatList>  
+              ) : 
+                (<Text>No tasks yet</Text>) 
+              }
+            </View>
+        </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  formContainer : {
+    flexDirection: 'row',
+    padding: 20,
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  textInput: {
+    flex: 0.8,
+    borderBottomWidth: 1
   },
-  highlight: {
-    fontWeight: '700',
+  taskListContainer: {
+    paddingHorizontal: 20,
+    marginTop: 10
   },
+  taskListTitle: {
+    fontSize: 20,
+    color: "#cccc",
+    fontWeight: '500',
+    marginBottom: 10
+  },
+  taskListItem: {
+    backgroundColor: "#f876",
+    margin: 5,
+    padding: 10
+  }
 });
 
 export default App;
