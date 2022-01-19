@@ -1,19 +1,20 @@
-import { StyleSheet, Dimensions } from "react-native";
-
-const { height } = Dimensions.get("window");
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-      },
-      confirmedContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: height * 0.25
-      },
-      confirmedtext: {
-        fontSize: 16,
-        color: '#212121',
-        marginVertical: 10,
-      },
+  container: {
+    flex: 1,
+    flexGrow: 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  subtitle: {
+      fontSize: 16,
+      color: '#212121',
+  },
+  buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+  }
   });

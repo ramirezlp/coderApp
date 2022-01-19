@@ -6,11 +6,12 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#ccc',
-        flexGrow: 0.18,
+        flexGrow: 0.15,
         flexShrink: 1,
         flexBasis: 50
       },
     text: {
-        fontSize: 30
+        fontSize: 30,
+        fontFamily: 'Roboto-Light',
     }
   });

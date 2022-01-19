@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    flexGrow: 0.25,
+    flexGrow: 0.20,
     justifyContent: "space-around",
     alignItems: 'center',
     elevation: 2,
