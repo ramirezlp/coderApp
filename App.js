@@ -15,30 +15,47 @@ import {
   Text,
   SafeAreaView,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import GameStart from './src/screens/gamestart/GameStart';
+import GameOverScreen from './src/screens/gameover/GameOverScreen';
 import GameScreen from './src/screens/gamescreen/GameScreen'
 import Header from './src/components/molecules/header/Header';
 
 const App = () => {
   const [userNumber, setUserNumber] = useState('');
+  const [guessRounds, setGuessRounds] = useState(0);
 
-  const handlerStartGamer = (selectedNumber) => {
+  const handlerStartGame = (selectedNumber) => {
     setUserNumber(selectedNumber);
+    setGuessRounds(0);
   } 
 
-  let content = userNumber ? 
-    <GameScreen userOption={userNumber} /> :
-    <GameStart onStartGame={handlerStartGamer} />
+  const handlerGameOver = (rounds) => {
+    setGuessRounds(rounds);
+  }
+
+  const handlerGameRestart = () => {
+    setGuessRounds(0);
+    setUserNumber('');
+  }
+
+  let content = userNumber && guessRounds <= 0 ?
+    <GameScreen userOption={userNumber} onGameOver={handlerGameOver} /> :
+    guessRounds > 0 ?
+    <GameOverScreen choice={userNumber} rounds={guessRounds} onRestart={handlerGameRestart} /> : 
+    <GameStart onStartGame={handlerStartGame} />;
 
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView behavior="height" style={styles.container}>
       <View style={styles.container}>
-      <Header titulo="Adiviná el número" />
+      <Header title="Adivina el número" />
         {content}
       </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
